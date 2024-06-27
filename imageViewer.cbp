@@ -66,11 +66,13 @@
 			<Add option="-mthreads" />
 		</Linker>
 		<Unit filename="include/BufferedBitmap.h" />
+		<Unit filename="include/DialogFilterView.h" />
 		<Unit filename="include/ListEnumTraitements.h" />
 		<Unit filename="include/ModelClass.h" />
 		<Unit filename="include/MyApp.h" />
 		<Unit filename="include/MyFrame.h" />
 		<Unit filename="include/ViewModelClass.h" />
+		<Unit filename="src/DialogFilterView.cpp" />
 		<Unit filename="src/ModelClass.cpp" />
 		<Unit filename="src/MyApp.cpp" />
 		<Unit filename="src/MyFrame.cpp" />

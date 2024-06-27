@@ -11,6 +11,7 @@
 #include "wx/artprov.h"
 #include "MyFrame.h"
 #include <wx/wfstream.h>
+#include "DialogFilterView.h"
 
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
@@ -201,11 +202,17 @@ void MyFrame::FiltreBlur(wxCommandEvent& WXUNUSED(event))
     if(!m_Image.IsOk())
         return;
 
-    //auto size_x = wxGetTextFromUser("taille du filtre", "size_x", "3");
-    //int sx = wxAtoi(size_x);
-    UpdateListFiltre("Blur");
-    m_viewModel->Blur(3,3);
-    UpdateBitmapImage(m_Image);
+    DialogFilterView dlg(this, wxID_ANY, "Configuration filtre gaussien");
+    dlg.DialogBlur();
+    if(dlg.ShowModal() == wxID_OK)
+    {
+        int x = dlg.GetSizeX();
+        int y = dlg.GetSizeY();
+
+        UpdateListFiltre("Blur");
+        m_viewModel->Blur(x,y);
+        UpdateBitmapImage(m_Image);
+    }
 }
 
 
