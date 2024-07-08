@@ -13,4 +13,13 @@ enum TREATMENTS
     ID_FILT_DILATE
 };
 
+enum CONVOLUTION
+{
+    MEAN = 1,
+    SHARPEN,
+    LAPLACIEN,
+    SOBEL_X,
+    SOBEL_Y,
+};
+
 #endif // LISTENUMTRAITEMENTS_H_INCLUDED

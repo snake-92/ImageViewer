@@ -221,9 +221,16 @@ void MyFrame::FiltreMedian(wxCommandEvent& WXUNUSED(event))
     if(!m_Image.IsOk())
         return;
 
-    UpdateListFiltre("Median");
-    m_viewModel->MedianBlur(3);
-    UpdateBitmapImage(m_Image);
+    DialogFilterView dlg(this, wxID_ANY, "Configuration filtre median");
+    dlg.DialogMedian();
+    if(dlg.ShowModal() == wxID_OK)
+    {
+        int siz = dlg.GetSize();
+
+        UpdateListFiltre("Median");
+        m_viewModel->MedianBlur(siz);
+        UpdateBitmapImage(m_Image);
+    }
 }
 
 
@@ -232,9 +239,16 @@ void MyFrame::FiltreConvolution(wxCommandEvent& event)
     if(!m_Image.IsOk())
         return;
 
-    UpdateListFiltre("Convolution");
+    DialogFilterView dlg(this, wxID_ANY, "Configuration filtre Convolution");
+    dlg.DialogConvolution();
+    if(dlg.ShowModal() == wxID_OK)
+    {
+        std::pair<int, wxString> res = dlg.GetTypeConvolution();
+        UpdateListFiltre("Convolution "+res.second);
+        m_viewModel->Convolution(res.first);
+        UpdateBitmapImage(m_Image);
+    }
 
-    UpdateBitmapImage(m_Image);
 }
 
 

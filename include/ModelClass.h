@@ -8,6 +8,8 @@
 class ModelClass
 {
     public:
+        // structure info filtre + parametre sur image
+        // tous les parametres de tous les filtres doivent être ajouté ici
         struct DataImage
         {
             cv::Mat image;

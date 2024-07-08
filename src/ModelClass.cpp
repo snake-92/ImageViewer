@@ -11,6 +11,8 @@ ModelClass::~ModelClass()
 }
 
 
+/** \brief Initialisation du vecteur contenant les informations images + filtre
+ */
 void ModelClass::Init()
 {
     m_listImages.clear();
@@ -18,11 +20,8 @@ void ModelClass::Init()
 
 
 /** \brief Ajout d'une paire traitement + image dans "m_listImages"
- *
- * \param
- * \param
- * \return
- *
+ * \param treatment_ : traitement associé à l'image
+ * \param img_ : image
  */
 void ModelClass::AddImageInList(TREATMENTS treatment_, cv::Mat img_)
 {
@@ -55,23 +54,21 @@ cv::Mat ModelClass::HideTreatment(int idx_, bool bhide_)
 }
 
 
-/** \brief Ajout d'une paire traitement + image dans "m_listImages"
- *
- * \param
- * \param
- * \return
- *
+/** \brief supprime un élément dans "m_listImages"
+ * \param idx_ : index à supprimer
  */
 cv::Mat ModelClass::RemoveTreatement(int idx_)
 {
     if(idx_ >= m_listImages.size() || m_listImages.empty())
         throw std::invalid_argument("index hors de la liste ou liste d'image vide !");
 
-    //if(idx_ == 0) // image base
-    //    return;
+    // TODO:
 }
 
 
+/** \brief Mise à jour de l'image visible. On reparcours tous les traitements et on applique pas les traitements en hide
+ * \return image à afficher
+ */
 cv::Mat ModelClass::UpdateModifFilter()
 {
     if(m_listImages.empty())
@@ -97,6 +94,10 @@ cv::Mat ModelClass::UpdateModifFilter()
 }
 
 
+/** \brief Applique les filtres avec leur réglage sur l'image dans DataImage
+ * \param
+ * \return
+ */
 cv::Mat ModelClass::ApplyFilter(DataImage data_)
 {
     cv::Mat im_out;
@@ -116,6 +117,14 @@ cv::Mat ModelClass::ApplyFilter(DataImage data_)
 }
 
 
+/** \brief Filtre gaussien
+ *
+ * \param image
+ * \param size_x
+ * \param size_y
+ * \return image filtrée
+ *
+ */
 cv::Mat ModelClass::BlurFilter(const cv::Mat& im_in, int size_x, int size_y, bool brefresh_)
 {
     if(size_x%2 == 0)
@@ -141,6 +150,13 @@ cv::Mat ModelClass::BlurFilter(const cv::Mat& im_in, int size_x, int size_y, boo
 }
 
 
+/** \brief Filtre médian
+ *
+ * \param image
+ * \param size_
+ * \return image filtrée
+ *
+ */
 cv::Mat ModelClass::MedianFilter(const cv::Mat& im_in, int size_, bool brefresh_)
 {
     if(size_%2 == 0)
@@ -163,12 +179,23 @@ cv::Mat ModelClass::MedianFilter(const cv::Mat& im_in, int size_, bool brefresh_
 }
 
 
+/** \brief Filtre convolution
+ *
+ * \param image
+ * \param kernel : noyau de filtrage
+ * \return image filtrée
+ *
+ */
 cv::Mat ModelClass::Convolution(const cv::Mat& im_in, const cv::Mat& kernel, bool brefresh_)
 {
     cv::Mat im_out;
 
-    cv::filter2D(im_in, im_out, -1, kernel);
+    cv::Mat imFloat, imFloatOut;
+    im_in.convertTo(imFloat, CV_32F);
 
+    cv::filter2D(imFloat, imFloatOut, -1, kernel);
+    cv::normalize(imFloatOut,imFloatOut,0,255,cv::NORM_MINMAX);
+    imFloatOut.convertTo(im_out, CV_8U);
     if(!brefresh_)
     {
         DataImage data;

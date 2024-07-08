@@ -2,6 +2,7 @@
 #define DIALOGFILTERVIEW_H
 
 #include <wx/wx.h>
+#include <utility>
 
 class DialogFilterView : public wxDialog
 {
@@ -12,11 +13,22 @@ class DialogFilterView : public wxDialog
         int GetSizeX();
         int GetSizeY();
 
-    protected:
+        void DialogMedian();
+        int GetSize();
+
+        void DialogConvolution();
+        std::pair<int,wxString> GetTypeConvolution();
 
     private:
-        wxTextCtrl* m_sizeX;
-        wxTextCtrl* m_sizeY;
+        int m_sizeX;
+        int m_sizeY;
+
+        int m_sizeMed;
+
+        std::pair<int,wxString> m_type_convolution;
+
+    private:
+        void ClickRatioButton(wxCommandEvent& event);
 };
 
 #endif // DIALOGFILTERVIEW_H

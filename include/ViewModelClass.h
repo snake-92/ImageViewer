@@ -13,12 +13,14 @@ class ViewModelClass
         void SetImageBase();
         void Blur(int size_x, int size_y);
         void MedianBlur(int size_);
-        void Convolution();
+        void Convolution(int type_);
 
         void HideFilter(int idx_, bool bhide_);
 
     protected:
         ModelClass* m_model;
+
+        cv::Mat GetKernelConv(int type_);
 
     private:
         wxImage& m_Image;

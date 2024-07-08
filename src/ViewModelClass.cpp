@@ -82,16 +82,51 @@ void ViewModelClass::MedianBlur(int size_)
 }
 
 
-void ViewModelClass::Convolution()
+
+cv::Mat ViewModelClass::GetKernelConv(int type_)
+{
+    CONVOLUTION nameType = static_cast<CONVOLUTION>(type_);
+
+    cv::Mat kernel;
+
+    switch(nameType)
+    {
+        case CONVOLUTION::MEAN : kernel = cv::Mat_<float>(3,3) << 1/9, 1/9, 1/9,
+                                                                   1/9, 1/9, 1/9,
+                                                                   1/9, 1/9, 1/9;
+                                    break;
+        case CONVOLUTION::SHARPEN : kernel = cv::Mat_<float>(3,3) << 1, -3, 1,
+                                                                   -3, 9, -3,
+                                                                   1, -3, 1;
+                                    break;
+        case CONVOLUTION::LAPLACIEN : kernel = cv::Mat_<float>(3,3) << 0, 1, 0,
+                                                                   1, -4, 1,
+                                                                   0, 1, 0;
+                                    break;
+        case CONVOLUTION::SOBEL_X : kernel = cv::Mat_<float>(3,3) << -1, -2, -1,
+                                                                   0, 0, 0,
+                                                                   1, 2, 1;
+                                    break;
+        case CONVOLUTION::SOBEL_Y : kernel = cv::Mat_<float>(3,3) << -1, 0, 1,
+                                                                   -2, 0, 2,
+                                                                   -1, 0, 1;
+                                    break;
+        default:
+            //throw std::exception("filtre convolution non existant");
+            break;
+    };
+
+    return kernel;
+}
+
+
+void ViewModelClass::Convolution(int type_)
 {
     // conversion en cv::Mat
     cv::Mat img = ConvertWxImageToCvMat(m_Image);
 
     // construction du kernel
-    cv::Mat kernel(1, 3, CV_8U);
-    kernel.at<uchar>(0,0) = 1;
-    kernel.at<uchar>(0,1) = 0;
-    kernel.at<uchar>(0,2) = -1;
+    cv::Mat kernel = GetKernelConv(type_);
 
     cv::Mat imOut = m_model->Convolution(img, kernel);
 
