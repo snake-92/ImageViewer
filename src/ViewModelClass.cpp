@@ -91,25 +91,37 @@ cv::Mat ViewModelClass::GetKernelConv(int type_)
 
     switch(nameType)
     {
-        case CONVOLUTION::MEAN : kernel = cv::Mat_<float>(3,3) << 1/9, 1/9, 1/9,
-                                                                   1/9, 1/9, 1/9,
-                                                                   1/9, 1/9, 1/9;
+        case CONVOLUTION::MEAN : kernel = cv::Mat::ones(3,3,CV_32F)/9.0f;
+                                 break;
+        case CONVOLUTION::SHARPEN :  kernel = cv::Mat::ones(3,3,CV_32F);
+                                    kernel.at<float>(0,1) = -3;
+                                    kernel.at<float>(1,0) = -3;     // 1, -3, 1,
+                                    kernel.at<float>(2,1) = -3;     // -3, 9, -3,
+                                    kernel.at<float>(1,2) = -3;     // 1, -3, 1
+                                    kernel.at<float>(1,1) = 9;
                                     break;
-        case CONVOLUTION::SHARPEN : kernel = cv::Mat_<float>(3,3) << 1, -3, 1,
-                                                                   -3, 9, -3,
-                                                                   1, -3, 1;
+        case CONVOLUTION::LAPLACIEN : kernel = cv::Mat::zeros(3,3,CV_32F);
+                                    kernel.at<float>(0,1) = 1;
+                                    kernel.at<float>(1,0) = 1;      // 0, 1, 0,
+                                    kernel.at<float>(2,1) = 1;      // 1, -4, 1,
+                                    kernel.at<float>(1,2) = 1;      // 0, 1, 0
+                                    kernel.at<float>(1,1) = -4;
                                     break;
-        case CONVOLUTION::LAPLACIEN : kernel = cv::Mat_<float>(3,3) << 0, 1, 0,
-                                                                   1, -4, 1,
-                                                                   0, 1, 0;
+        case CONVOLUTION::SOBEL_X : kernel = cv::Mat::zeros(3,3,CV_32F);
+                                    kernel.at<float>(0,0) = -1;
+                                    kernel.at<float>(0,1) = -2;         // -1, -2, -1,
+                                    kernel.at<float>(0,2) = -1;         // 0, 0, 0,
+                                    kernel.at<float>(2,0) = 1;          // 1, 2, 1
+                                    kernel.at<float>(2,1) = 2;
+                                    kernel.at<float>(2,2) = 1;
                                     break;
-        case CONVOLUTION::SOBEL_X : kernel = cv::Mat_<float>(3,3) << -1, -2, -1,
-                                                                   0, 0, 0,
-                                                                   1, 2, 1;
-                                    break;
-        case CONVOLUTION::SOBEL_Y : kernel = cv::Mat_<float>(3,3) << -1, 0, 1,
-                                                                   -2, 0, 2,
-                                                                   -1, 0, 1;
+        case CONVOLUTION::SOBEL_Y : kernel = cv::Mat::zeros(3,3,CV_32F);
+                                    kernel.at<float>(0,0) = -1;
+                                    kernel.at<float>(1,0) = -2;         // -1, 0, 1,
+                                    kernel.at<float>(2,0) = -1;         // -2, 0, 2,
+                                    kernel.at<float>(0,2) = 1;          // -1, 0, 1
+                                    kernel.at<float>(1,2) = 2;
+                                    kernel.at<float>(2,2) = 1;
                                     break;
         default:
             //throw std::exception("filtre convolution non existant");

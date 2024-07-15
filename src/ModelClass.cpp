@@ -189,13 +189,7 @@ cv::Mat ModelClass::MedianFilter(const cv::Mat& im_in, int size_, bool brefresh_
 cv::Mat ModelClass::Convolution(const cv::Mat& im_in, const cv::Mat& kernel, bool brefresh_)
 {
     cv::Mat im_out;
-
-    cv::Mat imFloat, imFloatOut;
-    im_in.convertTo(imFloat, CV_32F);
-
-    cv::filter2D(imFloat, imFloatOut, -1, kernel);
-    cv::normalize(imFloatOut,imFloatOut,0,255,cv::NORM_MINMAX);
-    imFloatOut.convertTo(im_out, CV_8U);
+    cv::filter2D(im_in, im_out, -1, kernel);
     if(!brefresh_)
     {
         DataImage data;
