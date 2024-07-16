@@ -109,6 +109,8 @@ cv::Mat ModelClass::ApplyFilter(DataImage data_)
         break;
     case TREATMENTS::ID_FILT_CONV : im_out = Convolution(data_.image, data_.kernel, true);
         break;
+    case TREATMENTS::ID_FILT_CANNY : im_out = CannyFilter(data_.image, data_.thresh1, data_.thresh2, true);
+        break;
     default: return m_listImages[0].image;
         break;
     }
@@ -197,6 +199,34 @@ cv::Mat ModelClass::Convolution(const cv::Mat& im_in, const cv::Mat& kernel, boo
         data.image = im_out;
         data.visible = true;
         data.kernel = kernel.clone();
+        AddImageInList(data);
+    }
+
+    return im_out;
+}
+
+
+/** \brief
+ *
+ * \param image d'entree
+ * \param thresh1 : seuil 1
+ * \param thresh2 : seuil 2
+ * \return image filtee
+ *
+ */
+cv::Mat ModelClass::CannyFilter(const cv::Mat& im_in, int thresh1, int thresh2, bool brefresh_)
+{
+    cv::Mat im_out;
+    cv::Canny(im_in, im_out, thresh1, thresh2);
+
+    if(!brefresh_)
+    {
+        DataImage data;
+        data.filtre = TREATMENTS::ID_FILT_CANNY;
+        data.image = im_out;
+        data.visible = true;
+        data.thresh1 = thresh1;
+        data.thresh2 = thresh2;
         AddImageInList(data);
     }
 

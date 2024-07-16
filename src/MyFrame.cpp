@@ -257,7 +257,15 @@ void MyFrame::FiltreCanny(wxCommandEvent& WXUNUSED(event))
     if(!m_Image.IsOk())
         return;
 
-    UpdateListFiltre("Canny");
+    DialogFilterView dlg(this, wxID_ANY, "Configuration filtre de Canny");
+    dlg.DialogCanny();
+    if(dlg.ShowModal() == wxID_OK)
+    {
+        std::pair<int, int> res = dlg.Get2Threshold();
+        UpdateListFiltre("Canny");
+        m_viewModel->CannyFilt(res.first,res.second);
+        UpdateBitmapImage(m_Image);
+    }
 }
 
 

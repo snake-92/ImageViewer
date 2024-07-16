@@ -19,6 +19,9 @@ class DialogFilterView : public wxDialog
         void DialogConvolution();
         std::pair<int,wxString> GetTypeConvolution();
 
+        void DialogCanny();
+        std::pair<int, int> Get2Threshold();
+
     private:
         int m_sizeX;
         int m_sizeY;
@@ -26,6 +29,8 @@ class DialogFilterView : public wxDialog
         int m_sizeMed;
 
         std::pair<int,wxString> m_type_convolution;
+
+        std::pair<int,int> m_thresholds;
 
     private:
         void ClickRatioButton(wxCommandEvent& event);

@@ -145,3 +145,15 @@ void ViewModelClass::Convolution(int type_)
     // convertion en wxImage
     CopyCvMatToWxImage(imOut);
 }
+
+
+void ViewModelClass::CannyFilt(int thresh1, int thresh2)
+{
+     // conversion en cv::Mat
+    cv::Mat img = ConvertWxImageToCvMat(m_Image);
+
+    cv::Mat imOut = m_model->CannyFilter(img, thresh1, thresh2);
+
+    // convertion en wxImage
+    CopyCvMatToWxImage(imOut);
+}

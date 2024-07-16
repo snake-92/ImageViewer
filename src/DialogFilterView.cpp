@@ -13,6 +13,7 @@ DialogFilterView::DialogFilterView(wxWindow* parent, wxWindowID id, const wxStri
     m_sizeY = 3;
     m_sizeMed = 3;
     m_type_convolution=std::make_pair(1,"moyenneur");
+    m_thresholds=std::make_pair(100,200);
 }
 
 
@@ -138,4 +139,41 @@ void DialogFilterView::ClickRatioButton(wxCommandEvent& event)
 std::pair<int,wxString> DialogFilterView::GetTypeConvolution()
 {
     return m_type_convolution;
+}
+
+
+/** \brief Fenetre de dialog pour le filtre de Canny
+ */
+void DialogFilterView::DialogCanny()
+{
+    // permet d'autoriser uniquement la saisi de nombre dans wxTextCtrl
+    wxFloatingPointValidator<int> val_x(0,&m_thresholds.first,wxNUM_VAL_DEFAULT);
+    wxFloatingPointValidator<int> val_y(0,&m_thresholds.second,wxNUM_VAL_DEFAULT);
+    val_x.SetRange(VAL_MIN, VAL_MAX);
+    val_y.SetRange(VAL_MIN, VAL_MAX);
+
+    auto ctrlX = new wxTextCtrl(this, wxID_ANY, "100", wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER, val_x, wxTextCtrlNameStr);
+    auto ctrlY = new wxTextCtrl(this, wxID_ANY, "200", wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER, val_y, wxTextCtrlNameStr);
+
+    auto txt_x = new wxStaticText(this,wxID_ANY,"Threshold 1 ");
+    auto txt_y = new wxStaticText(this,wxID_ANY,"Threshold 2 ");
+
+    auto mainHorX = new wxBoxSizer(wxHORIZONTAL);
+    mainHorX->Add(txt_x, 0, wxEXPAND | wxRIGHT, 10);
+    mainHorX->Add(ctrlX, 0, wxEXPAND | wxALL, 1);
+
+    auto mainHorY = new wxBoxSizer(wxHORIZONTAL);
+    mainHorY->Add(txt_y, 0, wxEXPAND | wxRIGHT, 10);
+    mainHorY->Add(ctrlY, 0, wxEXPAND | wxALL, 1);
+
+    auto mainSizer = new wxBoxSizer(wxVERTICAL);
+    mainSizer->Add(mainHorX, 0, wxEXPAND | wxALL, 10);
+    mainSizer->Add(mainHorY, 0, wxEXPAND | wxALL, 10);
+    mainSizer->Add(CreateButtonSizer(wxOK | wxCANCEL), 0, wxALIGN_CENTER | wxALL, FromDIP(10));
+    this->SetSizerAndFit(mainSizer);
+}
+
+std::pair<int,int> DialogFilterView::Get2Threshold()
+{
+    return m_thresholds;
 }
