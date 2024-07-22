@@ -39,13 +39,26 @@ cv::Mat ViewModelClass::ConvertWxImageToCvMat(wxImage& image_)
 }
 
 
-void ViewModelClass::CopyCvMatToWxImage(const cv::Mat& img_)
+void ViewModelClass::CopyCvMatToWxImage(const cv::Mat& img_, bool bOneChannel)
 {
-    for(int y=0;y<img_.rows;y++)
+    if(bOneChannel)
     {
-        for(int x=0;x<img_.cols;x++)
+        for(int y=0;y<img_.rows;y++)
         {
-            m_Image.SetRGB(x, y, img_.at<cv::Vec3b>(y,x)[2], img_.at<cv::Vec3b>(y,x)[1], img_.at<cv::Vec3b>(y,x)[0]);
+            for(int x=0;x<img_.cols;x++)
+            {
+                m_Image.SetRGB(x, y, img_.at<uchar>(y,x), img_.at<uchar>(y,x), img_.at<uchar>(y,x));
+            }
+        }
+    }
+    else
+    {
+        for(int y=0;y<img_.rows;y++)
+        {
+            for(int x=0;x<img_.cols;x++)
+            {
+                m_Image.SetRGB(x, y, img_.at<cv::Vec3b>(y,x)[2], img_.at<cv::Vec3b>(y,x)[1], img_.at<cv::Vec3b>(y,x)[0]);
+            }
         }
     }
 }
@@ -155,5 +168,5 @@ void ViewModelClass::CannyFilt(int thresh1, int thresh2)
     cv::Mat imOut = m_model->CannyFilter(img, thresh1, thresh2);
 
     // convertion en wxImage
-    CopyCvMatToWxImage(imOut);
+    CopyCvMatToWxImage(imOut, true);
 }

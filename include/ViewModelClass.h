@@ -27,7 +27,7 @@ class ViewModelClass
         wxImage& m_Image;
 
         cv::Mat ConvertWxImageToCvMat(wxImage& image_);
-        void CopyCvMatToWxImage(const cv::Mat& img_);
+        void CopyCvMatToWxImage(const cv::Mat& img_, bool bOneChannel=false);
 };
 
 #endif // VIEWMODELCLASS_H

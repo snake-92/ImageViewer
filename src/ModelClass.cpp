@@ -216,8 +216,10 @@ cv::Mat ModelClass::Convolution(const cv::Mat& im_in, const cv::Mat& kernel, boo
  */
 cv::Mat ModelClass::CannyFilter(const cv::Mat& im_in, int thresh1, int thresh2, bool brefresh_)
 {
-    cv::Mat im_out;
-    cv::Canny(im_in, im_out, thresh1, thresh2);
+    cv::Mat im_out, greyMat;
+
+    cv::cvtColor(im_in, greyMat, cv::COLOR_BGR2GRAY);
+    cv::Canny(greyMat, im_out, thresh1, thresh2);
 
     if(!brefresh_)
     {
