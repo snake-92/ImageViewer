@@ -39,6 +39,7 @@ class ModelClass
         cv::Mat MedianFilter(const cv::Mat& im_in, int size_ = 3, bool brefresh=false);
         cv::Mat Convolution(const cv::Mat& im_in, const cv::Mat& kernel, bool brefresh=false);
         cv::Mat CannyFilter(const cv::Mat& im_in, int thresh1, int thresh2, bool brefresh=false);
+        cv::Mat Threshold(const cv::Mat& im_in, bool brefresh_=false);
 
         void AddImageInList(TREATMENTS treatment_, cv::Mat img_);
         void AddImageInList(DataImage);

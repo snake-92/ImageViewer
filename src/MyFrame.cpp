@@ -275,6 +275,8 @@ void MyFrame::FiltreThresh(wxCommandEvent& WXUNUSED(event))
         return;
 
     UpdateListFiltre("Threshold");
+    m_viewModel->Threshold();
+    UpdateBitmapImage(m_Image);
 }
 
 

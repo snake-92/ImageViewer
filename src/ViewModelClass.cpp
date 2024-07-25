@@ -170,3 +170,16 @@ void ViewModelClass::CannyFilt(int thresh1, int thresh2)
     // convertion en wxImage
     CopyCvMatToWxImage(imOut, true);
 }
+
+
+
+void ViewModelClass::Threshold()
+{
+    // conversion en cv::Mat
+    cv::Mat img = ConvertWxImageToCvMat(m_Image);
+
+    cv::Mat imOut = m_model->Threshold(img);
+
+    // convertion en wxImage
+    CopyCvMatToWxImage(imOut, true);
+}

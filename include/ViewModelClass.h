@@ -15,6 +15,7 @@ class ViewModelClass
         void MedianBlur(int size_);
         void Convolution(int type_);
         void CannyFilt(int thresh1, int thresh2);
+        void Threshold();
 
         void HideFilter(int idx_, bool bhide_);
 

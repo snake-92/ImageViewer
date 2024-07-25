@@ -111,6 +111,8 @@ cv::Mat ModelClass::ApplyFilter(DataImage data_)
         break;
     case TREATMENTS::ID_FILT_CANNY : im_out = CannyFilter(data_.image, data_.thresh1, data_.thresh2, true);
         break;
+    case TREATMENTS::ID_FILT_THRES : im_out = Threshold(data_.image, true);
+        break;
     default: return m_listImages[0].image;
         break;
     }
@@ -229,6 +231,34 @@ cv::Mat ModelClass::CannyFilter(const cv::Mat& im_in, int thresh1, int thresh2, 
         data.visible = true;
         data.thresh1 = thresh1;
         data.thresh2 = thresh2;
+        AddImageInList(data);
+    }
+
+    return im_out;
+}
+
+
+/** \brief Seuillage de l'image
+ *
+ * \param
+ * \param
+ * \return
+ *
+ */
+cv::Mat ModelClass::Threshold(const cv::Mat& im_in, bool brefresh_)
+{
+    cv::Mat im_out, greyMat, im_8bits;
+    cv::cvtColor(im_in, greyMat, cv::COLOR_BGR2GRAY); // conversion color -> niveau de gris
+
+    greyMat.convertTo(im_8bits, CV_8UC1); // conversion en image 8 bits
+    cv::threshold(im_8bits, im_out, 0, 255, cv::THRESH_OTSU);
+
+    if(!brefresh_)
+    {
+        DataImage data;
+        data.filtre = TREATMENTS::ID_FILT_THRES;
+        data.image = im_out;
+        data.visible = true;
         AddImageInList(data);
     }
 
